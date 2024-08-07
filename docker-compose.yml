@@ -1,0 +1,13 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8081:3000"
+    volumes:
+      - .:/src/app
+      - storages:/src/app/storages
+    env_file:
+      - .env
+
+volumes:
+  logs:
