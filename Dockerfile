@@ -11,13 +11,19 @@ COPY package*.json ./
 RUN npm install
 
 # Ensure storages directory exists with correct permissions
-RUN mkdir -p storages/uploads storages/logs && chmod -R 777 storages
+RUN mkdir -p /src/app/storages/uploads && \
+    mkdir -p /src/app/storages/logs && \
+    chmod -R 777 /src/app/storages/uploads && \
+    chmod -R 777 /src/app/storages/logs
 
-# Create the symlink for uploads
-RUN ln -s ../storages/uploads public/uploads
+# Create the public directory and symlink
+RUN mkdir -p public && ln -s ../storages/uploads public/uploads
 
 # Copy the rest of the application code
 COPY . .
+
+# Change ownership of the application directory to the node user
+RUN chown -R 1000:1000 /usr/src/app
 
 # Build TypeScript code
 RUN npm run build

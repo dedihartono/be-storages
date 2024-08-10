@@ -5,9 +5,7 @@ services:
       - "8081:3000"
     volumes:
       - .:/src/app
-      - storages:/src/app/storages
+      - ./storages/uploads:/src/app/storages/uploads:rw
+      - ./storages/logs:/src/app/storages/logs:rw
     env_file:
       - .env
-
-volumes:
-  logs:
