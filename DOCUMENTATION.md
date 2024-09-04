@@ -1,6 +1,3 @@
-Certainly! Here is the complete `documentation.md` file with the sections for uploading, deleting, retrieving, and listing files.
-
-```markdown
 # File Upload API Documentation
 
 ## Overview
@@ -56,13 +53,14 @@ curl -X POST http://localhost:8081/upload \
     "files": [
       {
         "name": "file.txt",
-        "location": "/storages/uploads/2024-08-08/1234567890.txt"
+        "location": "/storages/uploads/2024-08-08/1234567890.txt",
+        "passphraseCode": "sampleCode123"
       }
     ]
   }
   ```
 
-### 2. Delete a File
+### 2. Delete a File by ID
 
 - **Endpoint**: `/delete/{id}`
 - **Method**: `DELETE`
@@ -99,7 +97,44 @@ curl -X DELETE http://localhost:8081/delete/FILE_ID
   }
   ```
 
-### 3. Retrieve a File
+### 3. Delete a File by Passphrase Code
+
+- **Endpoint**: `/delete-passphrase?code=PASSCODE`
+- **Method**: `DELETE`
+- **Description**: Deletes a file using a unique passphrase code.
+
+#### Request
+
+- **Query Parameters**:
+  - `code`: The passphrase code associated with the file (type: `String`, required)
+
+#### Example Request using `curl`
+
+```sh
+curl -X DELETE "http://localhost:8081/delete-passphrase?code=PASSCODE"
+```
+
+#### Example Request using Postman
+
+1. Set the request type to `DELETE`.
+2. Enter the URL: `http://localhost:8081/delete-passphrase?code=PASSCODE` (replace `PASSCODE` with the actual passphrase code).
+3. Click `Send`.
+
+#### Response
+
+- **Status Code**: `200 OK` (success), `404 Not Found` (file not found), or `500 Internal Server Error` (failure)
+- **Body**:
+  ```json
+  {
+    "message": "File deleted successfully",
+    "file": {
+      "filename": "file.txt",
+      "path": "/storages/uploads/2024-08-08/1234567890.txt"
+    }
+  }
+  ```
+
+### 4. Retrieve a File
 
 - **Endpoint**: `/files/{file_path}`
 - **Method**: `GET`
@@ -127,7 +162,7 @@ curl -X GET http://localhost:8081/files/file_path
 - **Status Code**: `200 OK` (success) or `404 Not Found` (file not found)
 - **Body**: Binary data of the file
 
-### 4. List All Files
+### 5. List All Files
 
 - **Endpoint**: `/list`
 - **Method**: `GET`
@@ -163,7 +198,8 @@ curl -X GET http://localhost:8081/list
         "size": 1234,
         "alt": "sample alt text",
         "description": "sample description",
-        "uploadedAt": "2024-08-08T12:34:56Z"
+        "uploadedAt": "2024-08-08T12:34:56Z",
+        "passphraseCode": "sampleCode123"
       }
     ]
   }
@@ -178,6 +214,3 @@ curl -X GET http://localhost:8081/list
 ---
 
 Ensure to replace placeholders like `FILE_ID`, `file_path`, and `@/path/to/your/file.txt` with actual values when testing the API.
-```
-
-This documentation covers all the API endpoints, including uploading, deleting, retrieving, and listing files. It provides example requests using `curl` and Postman, and includes responses for each endpoint. Adjust the placeholders and file paths as needed for your specific use case.

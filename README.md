@@ -1,6 +1,3 @@
-Here is the updated `README.md` reflecting the use of Node.js built-in `crypto` module and the simplified folder structure:
-
-```markdown
 # Cloud Storage App
 
 This project is a simple cloud storage service built using Node.js and MongoDB. It allows users to upload, delete, retrieve, and list files.
@@ -18,10 +15,15 @@ docker compose -f docker-compose.yml -p cloud-storage up --build -d
 ```
 cloud-storage/
 ├── src/
+│   ├── controllers/
+│   │   └── upload.controller.ts
 │   ├── models/
 │   │   └── File.ts
 │   ├── app.ts
-│   └── server.ts
+│   ├── server.ts
+│   └── utils/
+│       ├── passphrase.ts
+│       └── index.ts
 ├── storages/
 │   ├── uploads/
 │   └── logs/
@@ -38,6 +40,7 @@ cloud-storage/
 
 - `POST /upload`: Upload files
 - `DELETE /delete/:id`: Delete a file by ID
+- `DELETE /delete-passphrase?code=`: Delete a file by passphrase code
 - `GET /files/:filename`: Retrieve a file by filename
 - `GET /list`: List all files
 
@@ -69,6 +72,3 @@ The application logs server activities, file uploads, and errors using a custom 
 ## License
 
 This project is licensed under the MIT License.
-```
-
-This `README.md` provides a clear and concise overview of the application setup, folder structure, API endpoints, environment variables, logging information, and a link to the detailed documentation in `documentation.md`.
