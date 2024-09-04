@@ -6,7 +6,7 @@ services:
       - ./storages/logs:/app/storages/logs
       - ./storages/uploads:/app/storages/uploads
     ports:
-      - "3000:3000"
+      - "8081:3000"
     env_file:
       - .env
 
