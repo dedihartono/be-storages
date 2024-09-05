@@ -58,7 +58,9 @@ const handleFileUpload = async (
           (file as formidable.File).originalFilename || ""
         )
         const newPath = path.join(uploadDir, newFileName)
-        fs.renameSync(oldPath, newPath)
+
+        fs.copyFileSync(oldPath, newPath)
+        fs.unlinkSync(oldPath)
 
         const newFile = new File({
           filename: newFileName,
@@ -237,9 +239,9 @@ const handleFileDeletionPassphraseCode = async (
 }
 
 export {
-    handleFileUpload,
-    handleFileList,
-    handleFileRetrieval,
-    handleFileDeletion,
-    handleFileDeletionPassphraseCode
+  handleFileUpload,
+  handleFileList,
+  handleFileRetrieval,
+  handleFileDeletion,
+  handleFileDeletionPassphraseCode,
 }
