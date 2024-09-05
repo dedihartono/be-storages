@@ -149,7 +149,7 @@ const handleFileRetrieval = (
   res: http.ServerResponse
 ) => {
   const filePath = req.url?.replace("/files/", "")
-  const absolutePath = path.join("storages", "uploads", filePath || "")
+  const absolutePath = path.join(filePath || "")
 
   fs.readFile(absolutePath, (err, data) => {
     if (err) {
