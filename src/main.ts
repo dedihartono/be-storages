@@ -72,6 +72,10 @@ const server = http.createServer((req, res) => {
     serveStaticFile(filePath, "text/html", res)
     return
   }
+  if (req.method?.toLowerCase() === "get" && req.url?.startsWith("/files/")) {
+    handleFileRetrieval(req, res)
+    return
+  }
 
   // Serve static files (e.g., images) from public/static/
   if (req.url?.startsWith("/static/")) {
@@ -95,9 +99,6 @@ const server = http.createServer((req, res) => {
     case req.method?.toLowerCase() === "delete" &&
       req.url?.startsWith("/delete"):
       handleFileDeletion(req, res)
-      break
-    case req.method?.toLowerCase() === "get" && req.url?.startsWith("/files/"):
-      handleFileRetrieval(req, res)
       break
     case req.method?.toLowerCase() === "get":
       handleGetFileById(req, res) // Pass the file ID to the handler
