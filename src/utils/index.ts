@@ -1,2 +1,2 @@
-export { generatePassphrase } from './passphrase'
-export { generateFileName } from './files'
+export * from './passphrase'
+export * from './files'

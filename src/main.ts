@@ -1,6 +1,7 @@
 import * as dotenv from "dotenv"
 import * as http from "http"
 import mongoose from "mongoose"
+import * as path from "path"
 import {
   handleFileDeletion,
   handleFileDeletionPassphraseCode,
@@ -9,6 +10,8 @@ import {
   handleFileUpload,
 } from "./controllers"
 import { logServer } from "./logger"
+import { validateApiKey } from "./middlewares"
+import { getMimeType, serveStaticFile } from "./utils"
 
 dotenv.config()
 
@@ -26,6 +29,38 @@ const connectToDatabase = async () => {
 }
 
 const server = http.createServer((req, res) => {
+  const publicFolder = path.join(__dirname, "../public")
+
+  console.log(req.url)
+  if (req.url === '/favicon.ico') {
+    serveStaticFile(path.join(__dirname, '../public/favicon.ico'), 'image/x-icon', res)
+    return
+  }
+
+  if (req.url === '/site.webmanifest') {
+    serveStaticFile(path.join(__dirname, '../public/site.webmanifest'), 'application/manifest+json', res)
+    return
+  }
+
+
+  // Serve index.html on root path without requiring API key
+  if (req.method?.toLowerCase() === "get" && req.url === "/") {
+    const filePath = path.join(publicFolder, "index.html")
+    serveStaticFile(filePath, "text/html", res)
+    return
+  }
+
+  // Serve static files (e.g., images) from public/static/
+  if (req.url?.startsWith('/static/')) {
+    const filePath = path.join(__dirname, '../public', req.url)
+    const ext = path.extname(filePath).toLowerCase()
+    const mimeType = getMimeType(ext)
+    serveStaticFile(filePath, mimeType, res)
+    return
+  }
+
+  if (!validateApiKey(req, res)) return
+
   switch (true) {
     case req.method?.toLowerCase() === "post" && req.url === "/upload":
       handleFileUpload(req, res)
