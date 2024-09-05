@@ -29,6 +29,17 @@ const connectToDatabase = async () => {
 }
 
 const server = http.createServer((req, res) => {
+
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT, OPTIONS')
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With, Authorization, x-api-key')
+
+  if (req.method?.toLowerCase() === 'options') {
+    res.writeHead(204)
+    res.end()
+    return
+  }
+
   const publicFolder = path.join(__dirname, "../public")
 
   console.log(req.url)
