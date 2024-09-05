@@ -238,10 +238,48 @@ const handleFileDeletionPassphraseCode = async (
   }
 }
 
+const handleGetFileById = async (
+  req: http.IncomingMessage,
+  res: http.ServerResponse,
+) => {
+  const id = req.url?.split("/").pop()
+  if (!id) {
+    res.writeHead(400, { "Content-Type": "application/json" })
+    res.end(JSON.stringify({ message: "File ID is required" }))
+    return
+  }
+
+  try {
+    const fileRecord = await File.findOne({_id: id});
+
+    if (!fileRecord) {
+      res.writeHead(404, { "Content-Type": "application/json" })
+      res.end(JSON.stringify({ message: "File not found" }))
+      return
+    }
+
+    const result = {
+      "_id": fileRecord._id,
+      "filename": fileRecord.filename,
+      "path": fileRecord.path,
+    }
+    res.writeHead(200, { "Content-Type": "application/json" })
+    res.end(JSON.stringify({ file: result }))
+  
+  } catch (err: any) {
+    console.error(`Error retrieving file: ${err.message}`)
+    res.writeHead(500, { "Content-Type": "application/json" })
+    res.end(
+      JSON.stringify({ message: "Internal Server Error", error: err.message })
+    )
+  }
+}
+
 export {
   handleFileUpload,
   handleFileList,
   handleFileRetrieval,
   handleFileDeletion,
   handleFileDeletionPassphraseCode,
+  handleGetFileById
 }

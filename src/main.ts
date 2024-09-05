@@ -8,6 +8,7 @@ import {
   handleFileList,
   handleFileRetrieval,
   handleFileUpload,
+  handleGetFileById,
 } from "./controllers"
 import { logServer } from "./logger"
 import { validateApiKey } from "./middlewares"
@@ -29,12 +30,17 @@ const connectToDatabase = async () => {
 }
 
 const server = http.createServer((req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*")
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, DELETE, PUT, OPTIONS"
+  )
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Content-Type, X-Requested-With, Authorization, x-api-key"
+  )
 
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT, OPTIONS')
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With, Authorization, x-api-key')
-
-  if (req.method?.toLowerCase() === 'options') {
+  if (req.method?.toLowerCase() === "options") {
     res.writeHead(204)
     res.end()
     return
@@ -42,17 +48,23 @@ const server = http.createServer((req, res) => {
 
   const publicFolder = path.join(__dirname, "../public")
 
-  console.log(req.url)
-  if (req.url === '/favicon.ico') {
-    serveStaticFile(path.join(__dirname, '../public/favicon.ico'), 'image/x-icon', res)
+  if (req.url === "/favicon.ico") {
+    serveStaticFile(
+      path.join(__dirname, "../public/favicon.ico"),
+      "image/x-icon",
+      res
+    )
     return
   }
 
-  if (req.url === '/site.webmanifest') {
-    serveStaticFile(path.join(__dirname, '../public/site.webmanifest'), 'application/manifest+json', res)
+  if (req.url === "/site.webmanifest") {
+    serveStaticFile(
+      path.join(__dirname, "../public/site.webmanifest"),
+      "application/manifest+json",
+      res
+    )
     return
   }
-
 
   // Serve index.html on root path without requiring API key
   if (req.method?.toLowerCase() === "get" && req.url === "/") {
@@ -62,8 +74,8 @@ const server = http.createServer((req, res) => {
   }
 
   // Serve static files (e.g., images) from public/static/
-  if (req.url?.startsWith('/static/')) {
-    const filePath = path.join(__dirname, '../public', req.url)
+  if (req.url?.startsWith("/static/")) {
+    const filePath = path.join(__dirname, "../public", req.url)
     const ext = path.extname(filePath).toLowerCase()
     const mimeType = getMimeType(ext)
     serveStaticFile(filePath, mimeType, res)
@@ -86,6 +98,9 @@ const server = http.createServer((req, res) => {
       break
     case req.method?.toLowerCase() === "get" && req.url?.startsWith("/files/"):
       handleFileRetrieval(req, res)
+      break
+    case req.method?.toLowerCase() === "get":
+      handleGetFileById(req, res) // Pass the file ID to the handler
       break
     case req.method?.toLowerCase() === "get" && req.url === "/list":
       handleFileList(req, res)
