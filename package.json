@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node dist/main.js",
     "dev": "nodemon src/main.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "postbuild": "copyfiles -u 1 src/data/**/* dist/data"
   },
   "dependencies": {
     "@types/mongoose": "^5.11.96",
@@ -18,6 +19,7 @@
   "devDependencies": {
     "@types/formidable": "^3.4.5",
     "@types/node": "^22.1.0",
+    "copyfiles": "^2.4.1",
     "nodemon": "^3.1.4",
     "typescript": "^5.5.4"
   }
