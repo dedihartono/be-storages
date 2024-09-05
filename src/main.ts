@@ -100,7 +100,7 @@ const server = http.createServer((req, res) => {
       req.url?.startsWith("/delete"):
       handleFileDeletion(req, res)
       break
-    case req.method?.toLowerCase() === "get":
+    case req.method?.toLowerCase() === "get" && req.url !== "/list":
       handleGetFileById(req, res) // Pass the file ID to the handler
       break
     case req.method?.toLowerCase() === "get" && req.url === "/list":
