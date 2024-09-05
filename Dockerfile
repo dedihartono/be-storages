@@ -17,7 +17,7 @@ COPY . .
 RUN mkdir -p /app/storages/logs /app/storages/uploads
 
 # Create a symbolic link 'public' that points to 'storages/uploads'
-RUN ln -s /app/storages/uploads /app/public/storages
+RUN ln -s /app/storages/uploads /app/public/storages/uploads
 
 # Build the TypeScript code
 RUN npm run build
