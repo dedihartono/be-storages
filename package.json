@@ -7,7 +7,7 @@
     "start": "node dist/main.js",
     "dev": "nodemon src/main.ts",
     "build": "tsc",
-    "postbuild": "copyfiles -u 1 src/data/**/* dist/data"
+    "postbuild": "copyfiles -u 1 src/data/**/* dist/"
   },
   "dependencies": {
     "@types/mongoose": "^5.11.96",
