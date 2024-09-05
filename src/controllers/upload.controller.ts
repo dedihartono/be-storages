@@ -262,6 +262,7 @@ const handleGetFileById = async (
       "_id": fileRecord._id,
       "filename": fileRecord.filename,
       "path": fileRecord.path,
+      "type": fileRecord.type,
     }
     res.writeHead(200, { "Content-Type": "application/json" })
     res.end(JSON.stringify({ file: result }))
