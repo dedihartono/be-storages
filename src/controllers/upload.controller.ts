@@ -33,6 +33,7 @@ const handleFileUpload = async (
     try {
       const fileArray = Array.isArray(files.file) ? files.file : [files.file]
       const fileDetails: {
+        _id: string
         name: string
         location: string
         passphraseCode: string
@@ -76,6 +77,7 @@ const handleFileUpload = async (
         await newFile.save()
 
         fileDetails.push({
+          _id: newFile._id.toString(),
           name: newFileName,
           location: newPath,
           passphraseCode: newFile.passphraseCode!,
